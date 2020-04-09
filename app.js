@@ -20,6 +20,8 @@ GAME RULES:
 //document.querySelector('btn-roll').addEventListener('click', btn); //btn is a callback function here cus event listener calls the function for us.
 //can also use an anonymous function so nobody can access it 
 let scores, roundScore, activePlayer, gamePlaying;
+let diceOld;
+let finalScore;
 init();
 
 document.querySelector('.btn-roll').addEventListener('click', function () {
@@ -34,7 +36,12 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
         diceDOM.src = 'dice-' + dice + '.png';
 
         //update thr round score if dice is not 1
-        if (dice !== 1) {
+        if (diceOld === 6 && dice === 6){
+            scores[activePlayer]=0;
+            document.getElementById('score-'+activePlayer).textContent  = '0';
+            nextPlayer();
+        }
+        else if (dice !== 1 ) {
             //add score
             roundScore += dice;
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
@@ -43,7 +50,9 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
             nextPlayer();
 
         }
+        diceOld = dice; 
     }
+
 
 });
 
@@ -56,8 +65,11 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
         //UI update
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
+        //get final score
+       // let finalScore = document.querySelector('.final-score').value;
+
         //check if player has won
-        if (scores[activePlayer] >= 100) {
+        if (scores[activePlayer] >= finalScore) {
             document.getElementById('name-' + activePlayer).textContent = 'Winner!';
             document.querySelector('.dice').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.toggle('winner');
@@ -85,7 +97,7 @@ function nextPlayer() {
 
 }
 
-document.querySelector('.btn-new').addEventListener('click', init);  //call back function init
+document.querySelector('.btn-new').addEventListener('click', init); //call back function init
 
 //things that happen when the game is started!
 function init() {
@@ -93,6 +105,8 @@ function init() {
     roundScore = 0;
     activePlayer = 0;
     gamePlaying = true;
+    diceOld = 0;
+    finalScore = document.querySelector('.final-score').value;
 
     document.querySelector('.dice').style.display = 'none';
 
@@ -108,3 +122,11 @@ function init() {
     document.querySelector('.player-0-panel').classList.add('active');
     document.querySelector('.player-1-panel').classList.remove('active');
 }
+
+/*
+Change the game to follow these rules:
+
+1. A player looses his ENTIRE score when he rolls two 6 in a row. After that, it's the next player's turn. (Hint: Always save the previous dice roll in a separate variable)
+2. Add an input field to the HTML where players can set the winning score, so that they can change the predefined score of 100. (Hint: you can read that value with the .value property in JavaScript. This is a good oportunity to use google to figure this out :)
+3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1. (Hint: you will need CSS to position the second dice, so take a look at the CSS code for the first one.)
+*/

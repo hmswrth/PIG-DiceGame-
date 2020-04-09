@@ -27,6 +27,9 @@ init();
 document.querySelector('.btn-roll').addEventListener('click', function () {
     if (gamePlaying) {
 
+     
+
+
         //random number with scope limited to the anonymous function
         let dice = Math.floor((Math.random()) * 6) + 1;
 
@@ -58,6 +61,14 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
 
 document.querySelector('.btn-hold').addEventListener('click', function () {
     if (gamePlaying) {
+
+        let input = document.querySelector('.final-score').value;
+        if (input){
+            finalScore = input;
+        }
+        else{
+            finalScore = 100;
+        }
 
         //add current score to global
         scores[activePlayer] += roundScore;
@@ -106,7 +117,8 @@ function init() {
     activePlayer = 0;
     gamePlaying = true;
     diceOld = 0;
-    finalScore = document.querySelector('.final-score').value;
+    
+
 
     document.querySelector('.dice').style.display = 'none';
 
